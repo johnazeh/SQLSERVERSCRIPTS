@@ -1,0 +1,10 @@
+SELECT 
+	[name] as [Database Name]
+	,[recovery_model_desc] as [Recovery Model]
+	,log_reuse_wait_desc as [Log Reuse Description]
+	,total_log_size_in_bytes*1.0/1024/1024 as [Total Log Size Mb]
+	,used_log_space_in_bytes*1.0/1024/1024 as [Log Used Space Mb]
+	,(total_log_size_in_bytes - used_log_space_in_bytes)*1.0/1024/1024 as [Free Log Space Mb]
+	,((total_log_size_in_bytes - used_log_space_in_bytes)*1.0/1024/1024)/((total_log_size_in_bytes*1.0/1024/1024))*100 as [% Space Free in Log]
+FROM sys.dm_db_log_space_usage loginfo
+inner join sys.databases dbs on dbs.database_id=loginfo.database_id;
